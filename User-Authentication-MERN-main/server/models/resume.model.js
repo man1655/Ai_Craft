@@ -11,7 +11,7 @@ const resumeSchema = new mongoose.Schema(
     jobTitle: { type: String, default: "" },
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     experience: [
       {
         title: { type: String },

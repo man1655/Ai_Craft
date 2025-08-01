@@ -11,6 +11,7 @@ export const createSession = async (req, res) => {
       experience,
       topicsToFocus,
       description,
+      user: req.user.id,
     });
 
     await session.save();
@@ -40,12 +41,18 @@ export const createSession = async (req, res) => {
 // Get all sessions with populated questions
 export const getAllSessions = async (req, res) => {
   try {
-    const sessions = await Session.find().populate('questions');
-    res.json(sessions);
+    const sessions = await Session.find({ user: req.user.id }).populate('questions');
+
+
+    res.status(200).json(sessions);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching sessions', error: err.message });
+    res.status(500).json({
+      message: 'Error fetching sessions',
+      error: err.message,
+    });
   }
 };
+
 
 // Get a session by ID
 export const getSessionById = async (req, res) => {
@@ -68,15 +75,24 @@ export const getSessionById = async (req, res) => {
 export const deleteSession = async (req, res) => {
   try {
     const sessionId = req.params.id;
+    const userId = req.user.id;
 
-    const deletedSession = await Session.findByIdAndDelete(sessionId);
+    // Only delete if the session belongs to the user
+    const deletedSession = await Session.findOneAndDelete({
+      _id: sessionId,
+      user: userId,
+    });
 
     if (!deletedSession) {
-      return res.status(404).json({ message: 'Session not found' });
+      return res.status(404).json({ message: 'Session not found or unauthorized' });
     }
 
     res.json({ message: 'Session deleted successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting session', error: err.message });
+    res.status(500).json({
+      message: 'Error deleting session',
+      error: err.message,
+    });
   }
 };
+

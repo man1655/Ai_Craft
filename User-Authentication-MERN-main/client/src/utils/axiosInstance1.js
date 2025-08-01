@@ -2,11 +2,11 @@ import axios from 'axios';
 import { BASE_URL } from './apiPaths';
 
 const axiosInstance1 = axios.create({
-  baseURL: 'http://localhost:4000/api', // Adjust if needed
+  baseURL: 'http://localhost:4000', // Adjust if needed
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // 🔥 Must match backend CORS config
+  withCredentials: true,
 });
 
 

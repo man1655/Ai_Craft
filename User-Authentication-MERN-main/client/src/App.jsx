@@ -1,7 +1,6 @@
 // src/App.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./pages/Home.jsx";
@@ -25,7 +24,10 @@ import ResumeUploadM2 from "./components/ResumeUploadM2.jsx";
 import EmailForm from "./EmailForm.jsx";
 import ResumeAnalyzer from "./components/ResumeAnalyzer.jsx";
 import Home3 from "./pages/Home3.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 import Test from "./pages/Test.jsx";
+import ProtectedRoute from "./components/Protected/ProtectedRoute.js";
   
 // import Home3 from './pages/Home';
 // import Test from './pages/Test';
@@ -34,32 +36,129 @@ import Reasult from './pages/Reasult';
 const App = () => {
   return (
     <>
+     <ToastContainer />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/features/ai-resume-builder' element={<HomePage />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/dashboard/edit-resume/:resume_id' element={<EditResume />} />
-        <Route path='/dashboard/view-resume/:resume_id' element={<ViewResume />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/email-verify' element={<EmailVerify />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/Companyregister' element={<CompanyRegister />} />
-        <Route path='/Companylogin' element={<CompanyLogin />} />
-        <Route path='/features/Interview-prep' element={<Landingpage />} />
-        <Route path='/Interview-prep/dashboard' element={<Dashboard1 />} />
-        <Route path='/interview-prep/:sessionId' element={<Interviewprep />} />
-        <Route path="/features/ResumeModal" element={<ResumeUploadM/>}/>
-        <Route path="/features/CompanyPortal" element={<ResumeUploadM2/>}></Route>
-        <Route path="/features/EmailGenerator" element={<EmailForm/>}></Route>
-        <Route path="/features/AiPath" element={<ResumeAnalyzer/>}></Route>
+        <Route path="/login" element={<Login />} />
+      <Route path="/email-verify" element={<EmailVerify />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/Companyregister" element={<CompanyRegister />} />
+      <Route path="/Companylogin" element={<CompanyLogin />} />
 
-        <Route path="/features/interview" element={<Home3/>}></Route>
-        <Route path="features/interview/test" element={<Test/>}></Route>
-        <Route path="features/interview/reasult" element={<Reasult/>}></Route>
-        
+      {/* Protected Routes */}
+      <Route
+        path="/features/ai-resume-builder"
+        element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/edit-resume/:resume_id"
+        element={
+          <ProtectedRoute>
+            <EditResume />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/view-resume/:resume_id"
+        element={
+          <ProtectedRoute>
+            <ViewResume />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/Interview-prep"
+        element={
+          <ProtectedRoute>
+            <Landingpage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/Interview-prep/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard1 />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/interview-prep/:sessionId"
+        element={
+          <ProtectedRoute>
+            <Interviewprep />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/ResumeModal"
+        element={
+          <ProtectedRoute>
+            <ResumeUploadM />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/CompanyPortal"
+        element={
+          <ProtectedRoute>
+            <ResumeUploadM2 />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/EmailGenerator"
+        element={
+          <ProtectedRoute>
+            <EmailForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/AiPath"
+        element={
+          <ProtectedRoute>
+            <ResumeAnalyzer />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/interview"
+        element={
+          <ProtectedRoute>
+            <Home3 />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/interview/test"
+        element={
+          <ProtectedRoute>
+            <Test />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/features/interview/reasult"
+        element={
+          <ProtectedRoute>
+            <Reasult />
+          </ProtectedRoute>
+        }
+      />
       </Routes>
-
-
       <Toaster
         position="top-right"
         toastOptions={{

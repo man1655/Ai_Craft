@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   FileText,
   Target,
@@ -20,6 +19,36 @@ import {
 const Homepage2 = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [particles, setParticles] = useState([]);
+  
+  useEffect(() => {
+    const particleArray = [];
+    for (let i = 0; i < 100; i++) {
+      particleArray.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 4 + 1,
+        speedX: (Math.random() - 0.5) * 0.5,
+        speedY: (Math.random() - 0.5) * 0.5,
+        opacity: Math.random() * 0.5 + 0.2,
+      });
+    }
+    setParticles(particleArray);
+
+    const animateParticles = () => {
+      setParticles((prev) =>
+        prev.map((particle) => ({
+          ...particle,
+          x: (particle.x + particle.speedX + 100) % 100,
+          y: (particle.y + particle.speedY + 100) % 100,
+        }))
+      );
+    };
+
+    const interval = setInterval(animateParticles, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,26 +62,34 @@ const Homepage2 = () => {
     {
       icon: <FileText className="w-8 h-8" />,
       title: "AI Resume Builder",
-      description: "Create professional, ATS-optimized resumes...",
+      description:
+        "Create professional, ATS-optimized resumes with cutting-edge AI technology that understands modern hiring trends.",
       link: "/features/ai-resume-builder",
+      gradient: "from-blue-500 to-cyan-400",
     },
     {
       icon: <Target className="w-8 h-8" />,
       title: "Interview Preparation",
-      description: "Practice with AI-generated questions...",
+      description:
+        "Practice with AI-generated questions tailored to your industry and receive real-time feedback.",
       link: "/features/Interview-prep",
+      gradient: "from-purple-500 to-pink-400",
     },
     {
       icon: <Building2 className="w-8 h-8" />,
       title: "Company Portal",
-      description: "Recruiters can access candidate databases...",
+      description:
+        "Recruiters can access candidate databases and streamline their hiring process efficiently.",
       link: "/features/CompanyPortal",
+      gradient: "from-emerald-500 to-teal-400",
     },
     {
       icon: <Mail className="w-8 h-8" />,
       title: "AI Email Assistant",
-      description: "Generate personalized follow-up emails...",
+      description:
+        "Generate personalized follow-up emails that increase your response rates significantly.",
       link: "/features/EmailGenerator",
+      gradient: "from-orange-500 to-amber-400",
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
@@ -60,13 +97,15 @@ const Homepage2 = () => {
       description:
         "Test your interview skills with topic-based MCQs and get instant feedback and explanations.",
       link: "/features/interview",
+      gradient: "from-rose-500 to-pink-400",
     },
     {
       icon: <Bot className="w-8 h-8" />,
       title: "AI Roadmap Generator",
       description:
-        "skill development roadmap based on your resume using AI analysis.",
+        "Get personalized skill development roadmap based on your resume using advanced AI analysis.",
       link: "/features/AiPath",
+      gradient: "from-indigo-500 to-purple-400",
     },
   ];
 
@@ -126,201 +165,109 @@ const Homepage2 = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white/95 backdrop-blur-lg shadow-lg"
-            : "bg-white/90 backdrop-blur-sm"
-        }`}
-      >
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">C</span>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CareerCraft AI
-              </span>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
+      {/* Particle Background - Covering the entire website */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-transparent to-purple-900/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-900/10 to-transparent"></div>
+        
+        {/* Floating Orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        
+        {/* Floating Particles - Now covering the entire page */}
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className="absolute bg-white rounded-full animate-pulse"
+            style={{
+              left: `${particle.x}vw`,
+              top: `${particle.y}vh`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              opacity: particle.opacity,
+              animation: `pulse ${2 + Math.random() * 3}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 2}s`,
+            }}
+          />
+        ))}
+      </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
-                <a
-                  href="#features"
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-                >
-                  Features
-                </a>
-                <a
-                  href="#how-it-works"
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-                >
-                  How It Works
-                </a>
-                <a
-                  href="#testimonials"
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-                >
-                  Testimonials
-                </a>
-                <a
-                  href="#pricing"
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-                >
-                  Pricing
-                </a>
-              </div>
-            </div>
 
-            <div className="hidden md:flex items-center space-x-4">
-              <Link
-                to="/login"
-                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-              >
-                Sign In
-              </Link>
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                Get Started
-              </button>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-lg rounded-lg mt-2 shadow-lg">
-                <a
-                  href="/"
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  Home
-                </a>
-                <a
-                  href="/dashboard"
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  ResumeBuilder
-                </a>
-                <a
-                  href="#testimonials"
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  IntervirePrep
-                </a>
-                <a
-                  href="#pricing"
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  Pricing
-                </a>
-                <div className="pt-2 space-y-2">
-                  <Link
-                    to="/login"
-                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
-                  >
-                    Sign In
-                  </Link>
-                  <button className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-2 rounded-lg font-medium">
-                    Get Started
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse animation-delay-2000"></div>
-
+      <section className="pt-20 pb-16 relative">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
                 Build Your{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
                   Dream Career
                 </span>{" "}
                 with AI
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Create professional resumes, master interviews, and land your
                 dream job with our comprehensive AI-driven platform. Trusted by
                 thousands worldwide.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center">
+                <button className="group bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transform hover:scale-105 transition-all duration-300 flex items-center justify-center border border-cyan-400/20">
                   Start Building Free
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
-                <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-600 hover:text-blue-600 transition-all duration-200">
+                <button className="border-2 border-slate-700 text-slate-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 hover:shadow-xl hover:shadow-cyan-400/20 hover:bg-slate-800/50 transition-all duration-300">
                   Watch Demo
                 </button>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+                  <div key={index} className="text-center group">
+                    <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-1 group-hover:scale-110 transition-transform duration-300">
                       {stat.number}
                     </div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
+                    <div className="text-sm text-slate-400">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+              <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/90 rounded-3xl shadow-2xl shadow-cyan-500/10 p-8 transform rotate-3 hover:rotate-0 transition-all duration-500 border border-slate-700/50 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex space-x-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   </div>
-                  <div className="text-sm text-gray-500">Resume Builder</div>
+                  <div className="text-sm text-slate-400 font-medium">
+                    Resume Builder
+                  </div>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="h-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-                  <div className="h-3 bg-gray-200 rounded-full w-4/5"></div>
-                  <div className="h-3 bg-gray-200 rounded-full w-3/5"></div>
-                  <div className="h-3 bg-gray-200 rounded-full w-5/6"></div>
+                  <div className="h-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full shadow-lg shadow-cyan-500/20"></div>
+                  <div className="h-3 bg-slate-700 rounded-full w-4/5"></div>
+                  <div className="h-3 bg-slate-700 rounded-full w-3/5"></div>
+                  <div className="h-3 bg-slate-700 rounded-full w-5/6"></div>
                   <div className="space-y-2 mt-6">
-                    <div className="h-2 bg-gray-100 rounded-full"></div>
-                    <div className="h-2 bg-gray-100 rounded-full w-4/5"></div>
-                    <div className="h-2 bg-gray-100 rounded-full w-3/5"></div>
+                    <div className="h-2 bg-slate-700 rounded-full"></div>
+                    <div className="h-2 bg-slate-700 rounded-full w-4/5"></div>
+                    <div className="h-2 bg-slate-700 rounded-full w-3/5"></div>
                   </div>
                 </div>
               </div>
 
               {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 bg-green-500 text-white p-3 rounded-full shadow-lg animate-bounce">
+              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-emerald-400 to-green-500 text-white p-3 rounded-full shadow-xl shadow-emerald-500/30 animate-bounce">
                 <CheckCircle className="w-6 h-6" />
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-white p-3 rounded-full shadow-lg animate-pulse">
+              <div className="absolute -bottom-4 -left-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white p-3 rounded-full shadow-xl shadow-amber-500/30 animate-pulse">
                 <Star className="w-6 h-6" />
               </div>
             </div>
@@ -329,13 +276,16 @@ const Homepage2 = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="features"
+        className="py-20 relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               Everything You Need to Land Your Dream Job
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Our AI-powered platform provides comprehensive tools for job
               seekers and recruiters to create, optimize, and manage career
               opportunities.
@@ -344,34 +294,39 @@ const Homepage2 = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Link
-                to={feature.link}
+              <a
+                href={feature.link}
                 key={index}
-                className="group p-8 rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 bg-white hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 block"
+                className="group p-8 rounded-3xl border border-slate-800/50 hover:border-slate-600/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 bg-gradient-to-br from-slate-900/50 to-slate-800/30 hover:from-slate-800/60 hover:to-slate-900/60 block backdrop-blur-sm hover:scale-105 relative z-10"
               >
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div
+                  className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-cyan-400 transition-colors duration-300">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-slate-300 leading-relaxed">
                   {feature.description}
                 </p>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="how-it-works"
+        className="py-20 relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Get started in minutes and transform your career journey with our
               simple 4-step process.
             </p>
@@ -379,19 +334,19 @@ const Homepage2 = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="text-center group">
+              <div key={index} className="text-center group relative z-10">
                 <div className="relative mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto group-hover:scale-110 transition-transform duration-300 shadow-xl shadow-cyan-500/30 border-2 border-cyan-400/20">
                     {step.number}
                   </div>
                   {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 opacity-30"></div>
+                    <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 opacity-30"></div>
                   )}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-cyan-400 transition-colors duration-300">
                   {step.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-slate-300 leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -401,13 +356,16 @@ const Homepage2 = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="testimonials"
+        className="py-20 relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               What Our Users Say
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Join thousands of successful professionals who have transformed
               their careers with CareerCraft AI.
             </p>
@@ -417,29 +375,29 @@ const Homepage2 = () => {
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+                className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 p-8 rounded-3xl shadow-xl border border-slate-800/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 backdrop-blur-sm hover:scale-105 group relative z-10"
               >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-2xl mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full flex items-center justify-center text-2xl mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                     {testimonial.image}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">
+                    <div className="font-semibold text-white group-hover:text-cyan-400 transition-colors duration-300">
                       {testimonial.name}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-slate-400">
                       {testimonial.role}
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 leading-relaxed italic">
+                <p className="text-slate-300 leading-relaxed italic mb-4">
                   "{testimonial.text}"
                 </p>
-                <div className="flex items-center mt-4">
+                <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-4 h-4 text-yellow-400 fill-current"
+                      className="w-4 h-4 text-amber-400 fill-current"
                     />
                   ))}
                 </div>
@@ -450,179 +408,31 @@ const Homepage2 = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
+      <section className="py-20 bg-gradient-to-br from-cyan-600 via-blue-600 to-purple-700 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 to-slate-950/40"></div>
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white opacity-10 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-white opacity-10 rounded-full animate-pulse animation-delay-1000"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-white/5 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-cyan-400/10 rounded-full animate-bounce"></div>
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
             Ready to Transform Your Career?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-cyan-50 mb-8 max-w-2xl mx-auto leading-relaxed">
             Join thousands of successful job seekers who have landed their dream
             jobs using CareerCraft AI. Start your journey today.
           </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-flex items-center">
+          <button className="bg-white text-cyan-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-white/30 transform hover:scale-105 transition-all duration-300 inline-flex items-center group border-2 border-white/20 relative z-10">
             Start Your Journey Today
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </button>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">C</span>
-                </div>
-                <span className="text-xl font-bold">CareerCraft AI</span>
-              </div>
-              <p className="text-gray-400 mb-4">
-                Empowering careers with AI-driven tools for job seekers and
-                recruiters worldwide.
-              </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200 cursor-pointer">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200 cursor-pointer">
-                  <Briefcase className="w-5 h-5" />
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200 cursor-pointer">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Resume Builder
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Interview Prep
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Company Portal
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Pricing
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Resources</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Career Blog
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Resume Templates
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Interview Guides
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Help Center
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-200"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>
-              &copy; 2025 CareerCraft AI. All rights reserved. Built with ❤️ for
-              job seekers everywhere.
-            </p>
-          </div>
-        </div>
-      </footer>
+  
+      
     </div>
   );
 };

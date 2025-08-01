@@ -20,7 +20,8 @@ const createResume = async (req, res) => {
 
   try {
     // Check if user is provided in the request (if you're using authentication)
-    const user = req.user ? req.user._id : null;  // If req.user is undefined, set it to null
+    const user = req.user.id;
+  // If req.user is undefined, set it to null
 
     // Create a new resume
     const resume = await Resume.create({
@@ -58,8 +59,10 @@ const createResume = async (req, res) => {
 // Get All Resumes
 const getALLResume = async (req, res) => {
   try {
-    // Get all resumes without checking for user authentication
-    const resumes = await Resume.find({});
+    const userId = req.user.id; // from JWT (via userAuth middleware)
+
+    const resumes = await Resume.find({ user: req.user.id }); // ✅ only this user's resumes
+
     return res
       .status(200)
       .json(new ApiResponse(200, resumes, "Resumes fetched successfully"));
@@ -70,6 +73,7 @@ const getALLResume = async (req, res) => {
       .json(new ApiError(500, "Internal Server Error", [], error.stack));
   }
 };
+
 
 // Get Single Resume
 const getResume = async (req, res) => {
@@ -139,13 +143,18 @@ const removeResume = async (req, res) => {
   const id = req.query.id;
 
   try {
-    // Check if the resume exists
-    const resume = await Resume.findByIdAndDelete(id);
+    const userId = req.user.id;
+
+    // Only delete the resume if it belongs to the logged-in user
+    const resume = await Resume.findOneAndDelete({
+      _id: id,
+      user: userId,
+    });
 
     if (!resume) {
       return res
         .status(404)
-        .json(new ApiResponse(404, null, "Resume not found"));
+        .json(new ApiResponse(404, null, "Resume not found or unauthorized"));
     }
 
     return res
@@ -158,6 +167,7 @@ const removeResume = async (req, res) => {
       .json(new ApiResponse(500, null, "Internal Server Error"));
   }
 };
+
 
 export {
   start,

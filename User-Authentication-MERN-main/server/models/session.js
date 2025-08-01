@@ -1,31 +1,36 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const sessionSchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      required: true
+      required: true,
     },
     experience: {
       type: String,
-      required: true
+      required: true,
     },
     topicsToFocus: {
-      type: String
+      type: String,
     },
     description: {
-      type: String
+      type: String,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     questions: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question'
-      }
-    ]
+        ref: "Question",
+      },
+    ],
   },
   { timestamps: true }
 );
 
-const Session = mongoose.model('Session', sessionSchema);
+const Session = mongoose.model("Session", sessionSchema);
 
 export default Session;

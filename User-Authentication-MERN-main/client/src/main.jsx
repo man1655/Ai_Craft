@@ -4,20 +4,26 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { CompanyProvider } from "./context/CompanyContext.jsx";
 import { AppContextProvider } from "./context/AppContext.jsx";
+import Nave from "./components/Nave.jsx";
+import Footer from "./components/Footer.jsx";
 
 // You *must* import your Redux store here:
 import { Provider } from "react-redux";
-import { resumeStore } from "./store/store";  // <- your store file path
+import { resumeStore } from "./store/store"; // <- your store file path
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={resumeStore}>        {/* <-- ADD this */}
+    <Provider store={resumeStore}>
+      {" "}
+      {/* <-- ADD this */}
       <CompanyProvider>
-        <AppContextProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <AppContextProvider>
+            <Nave />
             <App />
-          </BrowserRouter>
-        </AppContextProvider>
+            <Footer/>
+          </AppContextProvider>
+        </BrowserRouter>
       </CompanyProvider>
     </Provider>
   </React.StrictMode>
