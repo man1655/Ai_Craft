@@ -56,7 +56,7 @@ function Dashboard1() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 backdrop-blur-lg">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 backdrop-blur-lg my-18">
       <div className="container mx-auto pt-4 pb-4 px-8">
         {/* Session Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-7 pt-1 pb-6 px-4 md:px-0">

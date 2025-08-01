@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { ChevronRight, Play, CheckCircle, Star, Users, BookOpen, Target, Zap, ArrowRight, Menu, X, Link } from 'lucide-react';
-
 // Mock navigation function
-const useNavigate = () => (path) => console.log('Navigate to:', path);
+
 
 export default function Landingpage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -96,10 +96,7 @@ export default function Landingpage() {
                   Start Free Trial
                   <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button className="group flex items-center px-6 py-3 border border-white/20 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-lg hover:shadow-lg hover:shadow-cyan-500/10">
-                  <Play className="w-5 h-5 mr-2 text-purple-400 group-hover:scale-110 transition-transform" />
-                  Watch Demo
-                </button>
+                
               </div>
 
               {/* Stats */}

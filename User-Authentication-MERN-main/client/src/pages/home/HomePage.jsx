@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 // OR if you're using the public folder (Next.js style)
 const heroSnapshot = '/assets/hero-snapshot.png'; 
 import {
@@ -23,7 +24,7 @@ const addUserData = (data) => ({ type: "ADD_USER_DATA", payload: data });
 // Mock Redux functionality
 const useSelector = (selector) => ({ userData: null });
 const useDispatch = () => (action) => console.log("Dispatch:", action);
-const useNavigate = () => (path) => console.log("Navigate to:", path);
+
 
 // Mock image - using a placeholder
 
@@ -83,13 +84,10 @@ function HomePage() {
   }, []);
 
   const hadnleGetStartedClick = () => {
-    if (user) {
-      console.log("Printing from Homepage User is There ");
+  
       navigate("/dashboard");
-    } else {
-      console.log("Printing for Homepage User Not Found");
-      navigate("/dashboard");
-    }
+
+    
   };
 
   const features = [
