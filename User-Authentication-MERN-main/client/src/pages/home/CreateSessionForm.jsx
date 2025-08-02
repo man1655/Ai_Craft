@@ -95,7 +95,7 @@ function CreateSessionForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center max-w-md mx-auto p-4">
+    <div className="flex flex-col justify-center max-w-md mx-auto  ">
       <h3 className="text-lg font-semibold text-black">Start a New Interview Journey</h3>
       <p className="text-xs text-slate-700 mt-1 mb-3">
         Fill out a few quick details and unlock your personalized set of interview questions!

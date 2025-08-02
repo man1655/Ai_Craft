@@ -17,7 +17,7 @@ export const AppContextProvider = (props) => {
       if (data.success) setUserData(data.userData);
       else toast.error(data.message);
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Login failed: ");
     }
   };
 
@@ -33,7 +33,6 @@ export const AppContextProvider = (props) => {
         setUserData(null);
       }
     } catch (error) {
-      toast.error(error.message);
       setIsLoggedIn(false);
       setUserData(null);
     } finally {

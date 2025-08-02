@@ -47,10 +47,10 @@ export default function Landingpage() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
         
         {/* Floating Particles */}
-        {[...Array(400)].map((_, i) => (
+        {[...Array(150)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-cyan-400/40 rounded-full animate-float"
+            className="absolute w-1 h-1 bg-white rounded-full animate-float"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -88,7 +88,7 @@ export default function Landingpage() {
                 Transform your interview anxiety into unshakeable confidence.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row gap-4 mt-12">
                 <button 
                   onClick={() => navigate('/Interview-prep/dashboard')}
                   className="group bg-gradient-to-r from-cyan-500 to-purple-600 px-6 py-3 rounded-xl text-white font-semibold hover:from-cyan-600 hover:to-purple-700 transition-all duration-300 shadow-lg backdrop-blur-lg border border-white/10 hover:shadow-cyan-500/25 hover:scale-105"
@@ -100,20 +100,7 @@ export default function Landingpage() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 max-w-md">
-                <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-4 rounded-xl transition-all duration-300 hover:bg-white/10 hover:shadow-lg hover:shadow-cyan-500/10">
-                  <div className="text-2xl font-bold text-cyan-400 mb-1">94%</div>
-                  <div className="text-xs text-gray-400">Success Rate</div>
-                </div>
-                <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-4 rounded-xl transition-all duration-300 hover:bg-white/10 hover:shadow-lg hover:shadow-purple-500/10">
-                  <div className="text-2xl font-bold text-purple-400 mb-1">2.5x</div>
-                  <div className="text-xs text-gray-400">Faster Placement</div>
-                </div>
-                <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-4 rounded-xl transition-all duration-300 hover:bg-white/10 hover:shadow-lg hover:shadow-pink-500/10">
-                  <div className="text-2xl font-bold text-pink-400 mb-1">50K+</div>
-                  <div className="text-xs text-gray-400">Success Stories</div>
-                </div>
-              </div>
+             
             </div>
             
             <div className="lg:w-1/2 mt-10 lg:mt-0">
@@ -198,55 +185,7 @@ export default function Landingpage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="relative z-10 py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
-                Success Stories
-              </span>
-            </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Hear from people who transformed their careers with InterviewAI
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/20">
-            <div className="flex justify-center mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-              ))}
-            </div>
-            
-            <blockquote className="text-xl md:text-2xl text-center font-light mb-8 text-gray-300 leading-relaxed">
-              "{testimonials[currentTestimonial].content}"
-            </blockquote>
-            
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full flex items-center justify-center text-cyan-400 font-semibold mb-4 backdrop-blur-lg border border-white/10">
-                {testimonials[currentTestimonial].name.charAt(0)}
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-white">{testimonials[currentTestimonial].name}</div>
-                <div className="text-gray-400">{testimonials[currentTestimonial].role}</div>
-              </div>
-            </div>
-            
-            <div className="flex justify-center mt-8 space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial ? 'bg-cyan-400' : 'bg-gray-600'
-                  }`}
-                  onClick={() => setCurrentTestimonial(index)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
       
      

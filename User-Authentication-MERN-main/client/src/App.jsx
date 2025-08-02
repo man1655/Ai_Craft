@@ -1,7 +1,8 @@
 // src/App.jsx
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import AICraftLoader from './components/common/AICraftLoader';
 
 import Home from "./pages/Home.jsx";
 
@@ -34,6 +35,40 @@ import ProtectedRoute from "./components/Protected/ProtectedRoute.js";
 import Reasult from './pages/Reasult';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    // Simulate app initialization
+    const initializeApp = async () => {
+      try {
+        // Add any initialization logic here:
+        // - Check authentication
+        // - Load user preferences
+        // - Initialize services
+        // - Preload critical data
+        
+        // Simulate loading time (remove in production or make conditional)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        setIsAppReady(true);
+      } catch (error) {
+        console.error('App initialization failed:', error);
+        setIsAppReady(true); // Still show app even if initialization fails
+      }
+    };
+
+    initializeApp();
+  }, []);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
+  // Show loader until both app is ready and loading animation is complete
+  if (isLoading || !isAppReady) {
+    return <AICraftLoader onLoadingComplete={handleLoadingComplete} />;
+  }
   return (
     <>
      <ToastContainer />
@@ -62,6 +97,7 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      
       <Route
         path="/dashboard/edit-resume/:resume_id"
         element={
@@ -138,7 +174,7 @@ const App = () => {
         path="/features/interview"
         element={
           <ProtectedRoute>
-            <Home3 />
+            <Home3/>
           </ProtectedRoute>
         }
       />

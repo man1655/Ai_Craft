@@ -36,7 +36,7 @@ function ResumeForm() {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between py-10">
         <div className="flex gap-2 items-center">
           <Link to="/dashboard">
             <Button>

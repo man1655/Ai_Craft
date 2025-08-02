@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/Footer";
 // OR if you're using the public folder (Next.js style)
-const heroSnapshot = '/assets/hero-snapshot.png'; 
+// Adjust the path as necessary
 import {
   Circle,
   Info,
@@ -230,7 +231,7 @@ function HomePage() {
                 <div className="p-2 bg-gray-900/20">
                   <img
                     className="w-full h-auto rounded-2xl transition-transform duration-700 hover:scale-[1.02]"
-                    src={heroSnapshot}
+                    src='./heroSnapshot.png'
                     alt="AI Resume Builder Dashboard"
                   />
                 </div>
@@ -276,7 +277,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
       <style jsx>{`
         @keyframes float {
           0%,
@@ -312,7 +312,9 @@ function HomePage() {
           animation: gradient 3s ease infinite;
         }
       `}</style>
+      
     </>
+    
   );
 }
 

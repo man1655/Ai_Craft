@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   FileText,
   Target,
@@ -15,6 +16,7 @@ import {
   Briefcase,
   TrendingUp,
 } from "lucide-react";
+
 
 const Homepage2 = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -294,8 +296,8 @@ const Homepage2 = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <a
-                href={feature.link}
+              <Link
+                to={feature.link}
                 key={index}
                 className="group p-8 rounded-3xl border border-slate-800/50 hover:border-slate-600/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 bg-gradient-to-br from-slate-900/50 to-slate-800/30 hover:from-slate-800/60 hover:to-slate-900/60 block backdrop-blur-sm hover:scale-105 relative z-10"
               >
@@ -310,7 +312,7 @@ const Homepage2 = () => {
                 <p className="text-slate-300 leading-relaxed">
                   {feature.description}
                 </p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

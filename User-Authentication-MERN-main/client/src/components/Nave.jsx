@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Menu, X } from "lucide-react";
 import { AppContext } from "../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -58,10 +58,10 @@ function Nave() {
             {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8 text-white font-medium">
-                <a href="/" className="nav-link">Home</a>
-                <a href="/features/ai-resume-builder" className="nav-link">ResumeBuilder</a>
-                <a href="/features/Interview-prep" className="nav-link">InterviewPrep</a>
-                <a href="/features/EmailGenerator" className="nav-link">EmailGenerate</a>
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/features/ai-resume-builder" className="nav-link">ResumeBuilder</Link>
+                <Link to="/features/Interview-prep" className="nav-link">InterviewPrep</Link>
+                <Link to="/features/EmailGenerator" className="nav-link">EmailGenerate</Link>
               </div>
             </div>
 
@@ -81,18 +81,18 @@ function Nave() {
                 </>
               ) : (
                 <>
-                  <a
-                    href="/login"
+                  <Link
+                    to="/login"
                     className="text-slate-300 hover:text-cyan-400 font-medium transition duration-300"
                   >
                     Sign In
-                  </a>
-                  <a
-                    href="/register"
+                  </Link>
+                  <Link
+                    to="/login"
                     className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white px-6 py-2.5 rounded-full font-medium hover:shadow-xl hover:shadow-cyan-500/30 transform hover:scale-105 transition-all duration-300 border border-cyan-400/20"
                   >
                     Get Started
-                  </a>
+                  </Link>
                 </>
               )}
             </div>
@@ -112,10 +112,10 @@ function Nave() {
           {isMenuOpen && (
             <div className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 bg-slate-900/95 backdrop-blur-xl rounded-xl mt-2 shadow-2xl border border-slate-800/50">
-                <a href="/" className="mobile-nav-link">Home</a>
-                <a href="/dashboard" className="mobile-nav-link">ResumeBuilder</a>
-                <a href="#testimonials" className="mobile-nav-link">InterviewPrep</a>
-                <a href="#pricing" className="mobile-nav-link">Pricing</a>
+                <Link to="/" className="mobile-nav-link">Home</Link>
+                <Link to="/features/ai-resume-builder" className="mobile-nav-link">ResumeBuilder</Link>
+                <Link to="/features/Interview-prep" className="mobile-nav-link">InterviewPrep</Link>
+                <Link to="/features/EmailGenerator" className="mobile-nav-link">EmailGenerate</Link>
 
                 <div className="pt-2 space-y-2">
                   {isLoggedIn && userData ? (
@@ -132,13 +132,13 @@ function Nave() {
                     </>
                   ) : (
                     <>
-                      <a href="/login" className="mobile-nav-link">Sign In</a>
-                      <a
-                        href="/register"
+                      <Link to="/login" className="mobile-nav-link">Sign In</Link>
+                      <Link
+                        to="/register"
                         className="block w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-3 py-2 rounded-lg font-medium text-center"
                       >
                         Get Started
-                      </a>
+                      </Link>
                     </>
                   )}
                 </div>
