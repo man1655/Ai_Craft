@@ -18,7 +18,5 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    historyApiFallback: true, // Optional: ensures fallback to index.html
-  }
+ 
 });
