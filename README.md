@@ -36,39 +36,4 @@ An all-in-one platform to create professional resumes, analyze them against job 
 
 ## ⚙️ Setup Instructions
 
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/your-username/resume-builder-app.git
-cd resume-builder-app
-ence Transformers
-- **Authentication:** JWT, bcrypt, OTP email verification
-- **File Uploads:** Multer
-
----  cd server
-npm install
-# Create a .env file with:
-# MONGO_URI=your_mongodb_connection_string
-# JWT_SECRET=your_jwt_secret
-# EMAIL_USER=your_email@gmail.com
-# EMAIL_PASS=your_email_password_or_app_token
-npm start
-cd ../python-analyzer
-python -m venv venv
-source venv/bin/activate    # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-
-
-cd ../client
-npm install
-npm run dev
-
-
-
-
----
-
-Let me know if you'd like this customized further (like with real screenshots, project link, or deployment instructions for Render/Vercel).
-
-
+#
