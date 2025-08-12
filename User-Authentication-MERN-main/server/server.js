@@ -29,25 +29,12 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // === Manual CORS Middleware ===
-app.use((req, res, next) => {
-  const allowedOrigin = 'http://localhost:5173';
-  const origin = req.headers.origin;
 
-  if (origin === allowedOrigin) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  }
+app.use(cors({
+  origin: 'https://ai-craft-ec3lc5x1j-man1655s-projects.vercel.app',
+  credentials: true,
+}));
 
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204); // Preflight response 
-  }
-
-  next();
-});
-
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
