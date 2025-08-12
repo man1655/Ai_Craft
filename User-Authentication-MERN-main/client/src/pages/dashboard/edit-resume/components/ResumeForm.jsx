@@ -7,15 +7,17 @@ import Experience from "./form-components/Experience";
 import Education from "./form-components/Education";
 import Skills from "./form-components/Skills";
 import Project from "./form-components/Project";
-import { ArrowLeft, ArrowRight, HomeIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, HomeIcon, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import ThemeColor from "./ThemeColor";
+import {useNavigate} from 'react-router-dom' 
 
 function ResumeForm() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [enanbledNext, setEnabledNext] = useState(true);
   const [enanbledPrev, setEnabledPrev] = useState(true);
   const resumeInfo = useSelector((state) => state.editResume.resumeData);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentIndex === 0) {
@@ -29,10 +31,9 @@ function ResumeForm() {
     }
   }, [currentIndex]);
 
-  // To Add Dummy Data
-  // useEffect(() => {
-  //   dispatch(addResumeData(data));
-  // }, []);
+  const HandleDownload = () => {
+   navigate(`/dashboard/view-resume/${resumeInfo._id}`); 
+  };
 
   return (
     <div>
@@ -43,9 +44,10 @@ function ResumeForm() {
               <HomeIcon />
             </Button>
           </Link>
-          <ThemeColor resumeInfo={resumeInfo}/> 
+          <ThemeColor resumeInfo={resumeInfo} />
         </div>
         <div className="flex items-center gap-3">
+          {/* Conditionally render the Prev button */}
           {currentIndex > 0 && (
             <Button
               size="sm"
@@ -59,6 +61,15 @@ function ResumeForm() {
               <ArrowLeft /> Prev
             </Button>
           )}
+
+          {/* Conditionally render the Download button on the last page */}
+          {currentIndex === 5 && (
+            <Button size="sm" onClick={HandleDownload} className="text-sm gap-2">
+              <Download /> Download
+            </Button>
+          )}
+
+          {/* Conditionally render the Next button */}
           {currentIndex < 5 && (
             <Button
               size="sm"

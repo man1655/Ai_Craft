@@ -1,12 +1,10 @@
 import express from "express";
-import cors from "cors";
 import "dotenv/config";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import { execFile } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
-import bodyParser from "body-parser";
 import mockTestRouter from "./routes/mockTest.js";
 
 import connectDB from "./config/mongodb.js";
@@ -27,16 +25,28 @@ const __dirname = path.dirname(__filename);
 
 // Create Express app
 const app = express();
+
 const port = process.env.PORT || 4000;
 
-const corsOptions = {
-  origin: "http://localhost:5173",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
+// === Manual CORS Middleware ===
+app.use((req, res, next) => {
+  const allowedOrigin = 'http://localhost:5173';
+  const origin = req.headers.origin;
 
-app.use(cors(corsOptions));
+  if (origin === allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204); // Preflight response 
+  }
+
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -54,12 +64,10 @@ app.use("/api/sessions", sessionRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/email", emailRoutes);
-app.use(bodyParser.json());
 app.use("/api/mock-test", mockTestRouter);
 
 // === Resume Analyzer Upload (analyzer.py) ===
-const pythonPath =
-  "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
+const pythonPath = "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
 const analyzerPath = path.resolve(__dirname, "..", "analyzer.py");
 
 app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
@@ -74,9 +82,7 @@ app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
     (error, stdout, stderr) => {
       if (error) {
         console.error("execFile error:", error);
-        return res
-          .status(500)
-          .json({ error: "Python script failed", details: error.message });
+        return res.status(500).json({ error: "Python script failed", details: error.message });
       }
 
       try {
@@ -104,9 +110,7 @@ app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
     async (error, stdout, stderr) => {
       if (error) {
         console.error("Python execution failed:", stderr);
-        return res
-          .status(500)
-          .json({ error: "Python execution failed", details: stderr });
+        return res.status(500).json({ error: "Python execution failed", details: stderr });
       }
 
       try {
@@ -125,9 +129,7 @@ app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
         });
       } catch (err) {
         console.error("Failed to parse or generate roadmap:", err);
-        res
-          .status(500)
-          .json({ error: "Error parsing Python output or Gemini response" });
+        res.status(500).json({ error: "Error parsing Python output or Gemini response" });
       }
     }
   );

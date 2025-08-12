@@ -49,7 +49,7 @@ const App = () => {
         // - Preload critical data
         
         // Simulate loading time (remove in production or make conditional)
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve,1000));
         
         setIsAppReady(true);
       } catch (error) {
@@ -84,34 +84,33 @@ const App = () => {
       <Route
         path="/features/ai-resume-builder"
         element={
-          <ProtectedRoute>
+          
             <HomePage />
-          </ProtectedRoute>
         }
       />
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          
             <Dashboard />
-          </ProtectedRoute>
+          
         }
       />
       
       <Route
         path="/dashboard/edit-resume/:resume_id"
         element={
-          <ProtectedRoute>
+          
             <EditResume />
-          </ProtectedRoute>
+          
         }
       />
       <Route
         path="/dashboard/view-resume/:resume_id"
         element={
-          <ProtectedRoute>
+          
             <ViewResume />
-          </ProtectedRoute>
+          
         }
       />
       <Route

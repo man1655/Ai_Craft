@@ -2,11 +2,12 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// ✅ Define and export the context
 export const AppContext = createContext();
 
+axios.defaults.withCredentials = true; // <- set globally once
+
 export const AppContextProvider = (props) => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = "http://localhost:4000"; // or import.meta.env.VITE_BACKEND_URL
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,13 +18,12 @@ export const AppContextProvider = (props) => {
       if (data.success) setUserData(data.userData);
       else toast.error(data.message);
     } catch (error) {
-      toast.error("Login failed: ");
+      toast.error("Failed to fetch user data");
     }
   };
 
   const getAuthState = async () => {
     try {
-      axios.defaults.withCredentials = true;
       const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
       if (data.success) {
         setIsLoggedIn(true);
@@ -44,18 +44,18 @@ export const AppContextProvider = (props) => {
     getAuthState();
   }, []);
 
-  const value = {
-    backendUrl,
-    isLoggedIn,
-    setIsLoggedIn,
-    userData,
-    setUserData,
-    getUserData,
-    loading,
-  };
-
   return (
-    <AppContext.Provider value={value}>
+    <AppContext.Provider
+      value={{
+        backendUrl,
+        isLoggedIn,
+        setIsLoggedIn,
+        userData,
+        setUserData,
+        getUserData,
+        loading,
+      }}
+    >
       {props.children}
     </AppContext.Provider>
   );
