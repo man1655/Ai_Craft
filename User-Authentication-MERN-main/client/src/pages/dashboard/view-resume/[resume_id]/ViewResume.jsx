@@ -39,7 +39,7 @@ function ViewResume() {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center pt-16">
+      <div className="flex flex-col justify-center items-center my-10 mx-10 ">
         {/* This div contains elements you DO NOT want to print */}
         <div id="noPrint" className="my-10 mx-10 md:mx-20 lg:mx-36">
           <h2 className="text-center text-2xl font-medium">
@@ -67,8 +67,8 @@ function ViewResume() {
         {/* This is the div that contains the resume content you WANT to print */}
         <div
           id="printableArea"
-          className="bg-white rounded-lg p-8 print-area"
-          style={{ width: "210mm", height: "297mm" }}
+          className="bg-white rounded-lg p-16 print-area"
+          style={{ width: "210mm", height: "400mm" }}
         >
           <ResumePreview />
         </div>

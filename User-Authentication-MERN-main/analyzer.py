@@ -4,31 +4,68 @@ import json
 import re
 import pandas as pd
 import PyPDF2
+import fitz  # PyMuPDF
+import pytesseract
+from PIL import Image
+import io
+from rapidfuzz import fuzz
 from sentence_transformers import SentenceTransformer, util
+
+# Path to Tesseract (adjust if installed elsewhere)
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # --------------- Resume parsing helper functions ---------------
 
 def extract_text_from_pdf(pdf_path):
     text = ''
+    # Try normal text extraction
     with open(pdf_path, 'rb') as file:
         reader = PyPDF2.PdfReader(file)
         for page in reader.pages:
             content = page.extract_text()
             if content:
                 text += content + ' '
+
+    # If no text found, fallback to OCR
+    if not text.strip():
+        doc = fitz.open(pdf_path)
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            pix = page.get_pixmap()
+            img = Image.open(io.BytesIO(pix.tobytes("png")))
+            ocr_text = pytesseract.image_to_string(img)
+            text += ocr_text + " "
+
     return text.lower()
 
-def extract_skills(text, skills_list):
-    found_skills = []
-    for skill in skills_list:
-        if re.search(r'\b' + re.escape(skill.lower()) + r'\b', text):
-            found_skills.append(skill)
-    return found_skills
+# --------- Load Skills from CSV ---------
+skills_file = os.path.join(os.path.dirname(__file__), "skills.csv")
+if not os.path.exists(skills_file):
+    print("Error: skills.csv not found!", file=sys.stderr)
+    sys.exit(1)
 
+skills_df = pd.read_csv(skills_file)
+
+def extract_skills(text, threshold=85):
+    found = set()
+    words = re.split(r'[\s,;/\n]', text.lower())
+    for _, row in skills_df.iterrows():
+        base = str(row['skill']).strip().lower()
+        synonyms = [base] + str(row.get('synonyms', '')).split(',')
+        for syn in synonyms:
+            syn = syn.strip().lower()
+            if not syn:
+                continue
+            for word in words:
+                if fuzz.ratio(syn, word) >= threshold:
+                    found.add(base)
+    return list(found)
+
+# --------- Other Extractors ---------
 def extract_name(text):
     lines = text.strip().split('\n')
     for line in lines:
-        if line.strip() and not any(word in line.lower() for word in ['email', 'phone', 'address']):
+        if line.strip() and not any(word in line.lower() for word in ['email', 'phone', 'address', 'contact']):
             return line.strip().title()
     return "Not Found"
 
@@ -48,32 +85,7 @@ def extract_education(text):
             found_degrees.append(degree.upper().replace('\\.', '.'))
     return list(set(found_degrees)) or ["Not Found"]
 
-# Skill categories and all skills list
-skill_categories = {
-    "frontend": [
-        'html', 'css', 'javascript', 'typescript', 'react', 'vue.js', 'angular', 'sass', 'bootstrap', 'redux'
-    ],
-    "backend": [
-        'node.js', 'django', 'flask', 'spring', 'express.js', 'ruby on rails', 'php', 'asp.net', 'laravel', 'go'
-    ],
-    "mern": [
-        'mongodb', 'express.js', 'react', 'node.js', 'redux', 'graphql', 'jwt', 'docker', 'rest api', 'aws'
-    ],
-    "ai_ml": [
-        'python', 'tensorflow', 'pytorch', 'scikit-learn', 'keras', 'xgboost', 'lightgbm', 'catboost', 'nlp', 'computer vision'
-    ],
-    "devops": [
-        'docker', 'kubernetes', 'jenkins', 'ansible', 'terraform', 'git', 'ci/cd', 'prometheus', 'grafana', 'aws'
-    ]
-}
-all_skills = set()
-for skills in skill_categories.values():
-    all_skills.update(skills)
-all_skills = list(all_skills)
-
-def extract_resume_skills(text):
-    return extract_skills(text, all_skills)
-
+# --------- Job Matching ---------
 def normalize_skill(skill):
     return skill.lower().replace('.', '').replace('-', '').replace(' ', '')
 
@@ -95,7 +107,7 @@ def recommend_companies_by_skills(resume_skills, jobs_df):
         normalized_job_skills = set(normalize_skill(s) for s in job_skills)
 
         matched_skills_norm = normalized_resume_skills.intersection(normalized_job_skills)
-        if len(matched_skills_norm) == 0:
+        if not matched_skills_norm:
             continue
 
         matched_skills = [s for s in job_skills if normalize_skill(s) in matched_skills_norm]
@@ -112,17 +124,10 @@ def recommend_companies_by_skills(resume_skills, jobs_df):
             "required_skills": skills_raw
         })
 
-    # Sort by number of matched skills and match score
     all_matches.sort(key=lambda x: (len(x['matched_skills']), x['match_score']), reverse=True)
+    return {"top_matches": all_matches[:3], "all_matches": all_matches}
 
-    # Top 3 best matches
-    top_3 = all_matches[:3]
-
-    return {
-        "top_matches": top_3,
-        "all_matches": all_matches
-    }
-
+# --------- Main ---------
 def main():
     if len(sys.argv) < 2:
         print("Usage: python analyzer.py <resume_pdf_path>", file=sys.stderr)
@@ -140,10 +145,9 @@ def main():
     phone = extract_phone_number(resume_text)
     email = extract_email(resume_text)
     education = extract_education(resume_text)
-    resume_skills = extract_resume_skills(resume_text)
+    resume_skills = extract_skills(resume_text)
 
     jobs_df = pd.read_csv(job_dataset_path)
-
     recommendations = recommend_companies_by_skills(resume_skills, jobs_df)
 
     result = {
@@ -157,7 +161,6 @@ def main():
     }
 
     print(json.dumps(result, indent=2))
-
 
 if __name__ == '__main__':
     main()

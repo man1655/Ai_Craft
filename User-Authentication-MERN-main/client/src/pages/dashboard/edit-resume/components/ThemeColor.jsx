@@ -38,7 +38,8 @@ function ThemeColor({ resumeInfo }) {
     "#5A33FF",
     "#FF335A",
     "#335AFF",
-    "#FFFFFF"
+    "#FFFFFF",
+    "#000000"
   ];
 
   const [selectedColor, setSelectedColor] = useState();

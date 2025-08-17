@@ -84,15 +84,17 @@ const App = () => {
       <Route
         path="/features/ai-resume-builder"
         element={
-          
+          <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
         }
       />
       <Route
         path="/dashboard"
         element={
-          
+          <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
           
         }
       />
@@ -100,16 +102,18 @@ const App = () => {
       <Route
         path="/dashboard/edit-resume/:resume_id"
         element={
-          
+          <ProtectedRoute>
             <EditResume />
+          </ProtectedRoute>
           
         }
       />
       <Route
         path="/dashboard/view-resume/:resume_id"
         element={
-          
+          <ProtectedRoute>
             <ViewResume />
+          </ProtectedRoute>
           
         }
       />

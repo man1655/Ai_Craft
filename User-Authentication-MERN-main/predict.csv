@@ -1,0 +1,62 @@
+role,skill,synonyms
+frontend,html,html5
+frontend,css,css3
+frontend,javascript,"js;vanilla js;ecmascript"
+frontend,typescript,ts
+frontend,react,"react.js;reactjs"
+frontend,vue.js,vue
+frontend,angular,"angular.js;ng"
+frontend,sass,
+frontend,tailwind css,
+frontend,bootstrap,
+frontend,redux,
+frontend,next.js,
+frontend,nuxt.js,
+frontend,graphql,
+backend,node.js,"node;nodejs"
+backend,django,
+backend,flask,
+backend,spring,"spring boot"
+backend,express.js,express
+backend,ruby on rails,rails
+backend,php,
+backend,asp.net,asp
+backend,laravel,
+backend,go,golang
+mern,mongodb,mongo
+mern,express.js,express
+mern,react,"react.js;reactjs"
+mern,node.js,"node;nodejs"
+mern,redux,
+mern,graphql,
+mern,jwt,jsonwebtoken
+mern,docker,
+mern,rest api,api
+mern,aws,"amazon web services"
+ai_ml,python,py
+ai_ml,tensorflow,tf
+ai_ml,pytorch,torch
+ai_ml,scikit-learn,sklearn
+ai_ml,keras,
+ai_ml,xgboost,
+ai_ml,lightgbm,
+ai_ml,catboost,
+ai_ml,nlp,"natural language processing"
+ai_ml,computer vision,cv
+ai_ml,pandas,
+ai_ml,featuretools,
+ai_ml,k-means,
+ai_ml,nltk,"natural language toolkit"
+ai_ml,opencv,"cv;computer vision"
+ai_ml,gridsearchcv,
+ai_ml,fairml,
+devops,docker,
+devops,kubernetes,k8s
+devops,jenkins,
+devops,ansible,
+devops,terraform,
+devops,git,
+devops,ci/cd,"continuous integration;continuous deployment"
+devops,prometheus,
+devops,grafana,
+devops,aws,"amazon web services"

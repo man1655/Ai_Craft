@@ -1,0 +1,176 @@
+skill,synonyms
+html,"html5"
+css,"css3"
+javascript,"js;vanilla js;ecmascript;es6;es7;es8"
+typescript,"ts"
+react,"react.js;reactjs"
+react native,"rn"
+vue.js,"vue"
+angular,"angular.js;ng"
+svelte,
+ember.js,"ember"
+backbone.js,"backbone"
+bootstrap,
+tailwind css,"tailwind"
+material ui,"mui"
+redux,
+jquery,"jq"
+d3.js,"d3;data-driven documents"
+chart.js,
+node.js,"node;nodejs"
+deno,
+bun,
+django,
+flask,
+spring,"spring boot"
+express.js,"express"
+ruby on rails,"rails"
+php,
+asp.net,"asp;dotnet"
+laravel,
+codeigniter,
+symfony,
+cakephp,
+go,"golang"
+java,"jvm"
+scala,
+groovy,
+clojure,
+kotlin,
+swift,
+objective-c,"objc"
+c,
+c++,"cpp"
+c#,"csharp"
+rust,
+haskell,
+elixir,
+erlang,
+perl,
+lua,
+matlab,
+r,"r programming"
+sas,
+fortran,
+cobol,
+sql,
+mysql,
+postgresql,"postgres;psql"
+sqlite,
+oracle,
+mariadb,
+mongodb,"mongo"
+firebase,
+cassandra,
+couchdb,
+dynamodb,
+neo4j,"graphdb"
+redis,
+graphql,
+rest api,"api"
+soap,
+grpc,
+jwt,"jsonwebtoken"
+docker,
+kubernetes,"k8s"
+openshift,
+helm,
+jenkins,
+ansible,
+terraform,
+puppet,
+chef,
+git,
+github,
+gitlab,
+bitbucket,
+svn,"subversion"
+mercurial,"hg"
+ci/cd,"continuous integration;continuous deployment"
+prometheus,
+grafana,
+elastic search,"elasticsearch;es"
+logstash,
+kibana,"elk"
+splunk,
+aws,"amazon web services"
+azure,"microsoft azure"
+gcp,"google cloud;google cloud platform"
+ibm cloud,
+digitalocean,
+heroku,
+vercel,
+netlify,
+python,"py"
+tensorflow,"tf"
+pytorch,"torch"
+scikit-learn,"sklearn"
+keras,
+xgboost,
+lightgbm,
+catboost,
+pandas,
+numpy,
+scipy,
+matplotlib,"mpl"
+seaborn,
+nlp,"natural language processing"
+computer vision,"cv"
+opencv,
+openai,"chatgpt;gpt"
+huggingface,"transformers"
+langchain,
+llamaindex,"gpt-index"
+mlflow,
+kubeflow,
+ray,
+javafx,
+swing,
+qt,
+gtk,
+electron,
+cordova,
+ionic,
+flutter,
+dart,
+unity,
+unreal engine,"ue"
+three.js,"threejs;3djs"
+babylon.js,"babylon"
+blender,
+maya,
+autocad,
+tableau,
+power bi,"pbi"
+excel,"ms excel;spreadsheet"
+google sheets,"g-sheets"
+jira,
+confluence,
+notion,
+slack,
+microsoft teams,"ms teams"
+trello,
+asana,
+monday.com,"monday"
+zoom,
+figma,
+sketch,
+adobe xd,
+photoshop,"ps"
+illustrator,"ai"
+after effects,"ae"
+premiere pro,
+lightroom,
+jest,
+mocha,
+chai,
+junit,
+testng,
+selenium,
+cypress,
+playwright,
+puppeteer,
+postman,
+insomnia,
+swagger,
+openapi,

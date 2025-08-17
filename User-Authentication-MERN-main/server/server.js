@@ -6,6 +6,7 @@ import { execFile } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
 import mockTestRouter from "./routes/mockTest.js";
+import cors from "cors";
 
 import connectDB from "./config/mongodb.js";
 
@@ -29,14 +30,15 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // === Manual CORS Middleware ===
-
+// Middleware
 app.use(cors({
-  origin: 'https://ai-craft-ec3lc5x1j-man1655s-projects.vercel.app',
+  origin: 'http://localhost:5173', // Also fix origin here (see below)
   credentials: true,
 }));
-
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // ✅ Add this
 app.use(cookieParser());
+
 
 const upload = multer({ dest: "uploads/" });
 
@@ -122,7 +124,6 @@ app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
   );
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`✅ Server is running at http://localhost:${port}`);
 });
