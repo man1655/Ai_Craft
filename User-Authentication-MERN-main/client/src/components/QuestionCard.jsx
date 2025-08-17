@@ -1,6 +1,6 @@
 export default function QuestionCard({ question, selected, setSelected }) {
   return (
-    <div className="border p-4 rounded mb-4 shadow">
+    <div className="border p-4 rounded mb-4 shadow text-white ">
       <h3 className="font-semibold mb-2">{question.question}</h3>
       <div className="grid gap-2">
         {question.options.map((opt, idx) => (

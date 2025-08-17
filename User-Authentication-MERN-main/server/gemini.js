@@ -6,104 +6,120 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 let model;
 
 try {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('Missing GEMINI_API_KEY in environment variables');
+  }
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 } catch (e) {
   console.error('❌ Failed to initialize Gemini model:', e);
+  throw e; // Re-throw to prevent further execution
 }
 
-function cleanJSON(text) {
-  return text.replace(/```(?:json)?/g, '').trim();
+function cleanAndParseJSON(text) {
+  try {
+    // Remove all markdown code blocks if present
+    let cleaned = text.replace(/```(?:json)?/g, '').trim();
+    
+    // Handle cases where Gemini adds extra text before/after JSON
+    const jsonStart = cleaned.indexOf('{');
+    const jsonEnd = cleaned.lastIndexOf('}') + 1;
+    
+    if (jsonStart >= 0 && jsonEnd > 0) {
+      cleaned = cleaned.substring(jsonStart, jsonEnd);
+    }
+    
+    return JSON.parse(cleaned);
+  } catch (e) {
+    console.error('Failed to parse JSON:', e);
+    console.error('Original text:', text);
+    throw new Error('Invalid JSON response from Gemini');
+  }
 }
 
 export async function generateMCQs(topic, count = 10) {
+  if (!model) {
+    throw new Error('Gemini model not initialized');
+  }
+
   const prompt = `
-Generate ${count} MCQs on the topic "${topic}". Each question should:
-- Have an ID like "q1"
-- Have 4 options
-- Only one correct answer
-- Return strictly valid JSON like:
+Generate ${count} multiple-choice questions about "${topic}".
+Format your response as STRICT JSON with this structure:
 {
   "questions": [
     {
       "id": "q1",
-      "question": "What is ...?",
+      "question": "Question text here",
       "options": ["Option A", "Option B", "Option C", "Option D"]
     }
   ],
   "answers": {
-    "q1": 2
+    "q1": 0 // Index of correct option (0-3)
   }
 }
+
+IMPORTANT:
+- Only return valid JSON
+- Do not include any markdown formatting
+- Do not add any explanatory text
+- Ensure all property names are double-quoted
 `;
 
   try {
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    const text = cleanJSON(response.text());
-    return JSON.parse(text);
+    const text = response.text();
+    
+    console.log('Raw Gemini response:', text); // For debugging
+    
+    return cleanAndParseJSON(text);
   } catch (error) {
     console.error('Error generating MCQs:', error);
-    throw new Error('Gemini MCQ generation failed.');
+    throw new Error(`MCQ generation failed: ${error.message}`);
   }
 }
 
 export async function explainWrong(wrongQuestions) {
-  if (!wrongQuestions.length) return [];
+  if (!model) {
+    throw new Error('Gemini model not initialized');
+  }
+
+  if (!wrongQuestions?.length) return [];
 
   const prompt = `
-Given these incorrect answers, explain why each user answer is incorrect and what the correct one is.
-Respond ONLY in raw JSON. Do NOT wrap with markdown.
-
-Input:
+Explain why the user's answers are incorrect for these questions.
+Return ONLY raw JSON in this format:
 [
   {
     "id": "q1",
-    "question": "What is a closure?",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "userAnswer": 0,
-    "correctAnswer": 2
-  },
-  ...
-]
-
-Output:
-[
-  {
-    "id": "q1",
-    "explanation": "Option A is incorrect because... The correct answer is Option C."
+    "explanation": "Explanation text here",
+    "correctAnswer": 2 // Index of correct option
   }
 ]
 
 Questions:
 ${JSON.stringify(wrongQuestions, null, 2)}
+
+IMPORTANT:
+- Do not include any markdown formatting
+- Do not add any text outside the JSON structure
+- Ensure all property names are double-quoted
 `;
 
   try {
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    let text = response.text();
-
-    // 🧠 Print Gemini's full response
-    console.log("🧠 Gemini explanation raw output:\n", text);
-
-    // ✅ Strip any markdown code fences like ```json or ```
-    if (text.startsWith('```')) {
-      text = text.replace(/```(?:json)?/g, '').replace(/```/g, '').trim();
-    }
-
-    // 🛠 Try parsing it
-    const parsed = JSON.parse(text);
-
-    // ✅ Log parsed data
-    console.log("✅ Parsed explanations:", parsed);
-
-    return parsed;
+    const text = response.text();
+    
+    console.log('Raw explanation response:', text);
+    
+    return cleanAndParseJSON(text);
   } catch (error) {
-    console.error('❌ Error generating explanations:', error.message);
-    return [{
-      id: 'error',
-      explanation: 'Could not fetch explanations. Error parsing Gemini response.'
-    }];
+    console.error('Error generating explanations:', error);
+    return wrongQuestions.map(q => ({
+      id: q.id,
+      explanation: `Failed to generate explanation: ${error.message}`,
+      correctAnswer: q.correctAnswer
+    }));
   }
 }
