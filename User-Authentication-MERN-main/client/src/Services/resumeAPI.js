@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 });
 
 const createNewResume = async (data) => {
-  console.log("Data being sent to the backend:", data); // Log the data
+  console.log("Data being sent to the backend:"); // Log the data
   try {
     const response = await axiosInstance.post("resumes/createResume", data);
     return response.data;

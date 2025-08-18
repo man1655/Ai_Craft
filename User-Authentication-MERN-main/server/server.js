@@ -32,8 +32,16 @@ const port = process.env.PORT || 4000;
 // === Manual CORS Middleware ===
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Also fix origin here (see below)
+  origin: "http://localhost:5173",
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"], // make sure casing matches
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
+app.options("*", cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // ✅ Add this

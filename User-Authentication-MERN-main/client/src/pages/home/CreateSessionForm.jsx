@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import SpinnerLoader from '../../components/Loader/SpinnerLoader';
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import axiosInstance1 from '@/utils/axiosInstance1';
+import axiosInstance1 from "../../utils/axiosInstance"
 import { API_PATH } from "../../utils/apiPaths";
 
 function CreateSessionForm() {

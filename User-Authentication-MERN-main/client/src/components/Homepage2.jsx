@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   FileText,
   Target,
@@ -22,6 +23,7 @@ const Homepage2 = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [particles, setParticles] = useState([]);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const particleArray = [];
@@ -146,25 +148,26 @@ const Homepage2 = () => {
   ];
 
   const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Software Engineer at Google",
-      image: "👩‍💻",
-      text: "CareerCraft AI helped me land my dream job at Google. The resume optimization and interview prep were game-changers!",
-    },
-    {
-      name: "Mike Chen",
-      role: "HR Director at Microsoft",
-      image: "👨‍💼",
-      text: "As a recruiter, the company portal has streamlined our hiring process. We've reduced time-to-hire by 40%.",
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Marketing Manager at Spotify",
-      image: "👩‍🎨",
-      text: "The AI email assistant is incredible. My follow-up response rates increased by 60% after using it.",
-    },
-  ];
+  {
+    name: "Aarav Mehta",
+    role: "Software Engineer at TCS",
+    image: "👨‍💻",
+    text: "CareerCraft AI helped me crack my TCS interview. The resume builder and mock interviews were super helpful!",
+  },
+  {
+    name: "Priya Sharma",
+    role: "Career Coach, Delhi",
+    image: "👩‍🏫",
+    text: "I recommend CareerCraft AI to all my students. Its tools make job hunting easier and more effective.",
+  },
+  {
+    name: "Rohit Verma",
+    role: "Digital Marketing Lead at Zomato",
+    image: "👨‍🎨",
+    text: "The AI email assistant is a total game-changer. My follow-up emails now get way more responses!",
+  },
+];
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
@@ -218,13 +221,11 @@ const Homepage2 = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-                <button className="group bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transform hover:scale-105 transition-all duration-300 flex items-center justify-center border border-cyan-400/20">
+                <button className="group bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transform hover:scale-105 transition-all duration-300 flex items-center justify-center border border-cyan-400/20" onClick={()=>navigate("/features/ai-resume-builder")}>
                   Start Building Free
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
-                <button className="border-2 border-slate-700 text-slate-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 hover:shadow-xl hover:shadow-cyan-400/20 hover:bg-slate-800/50 transition-all duration-300">
-                  Watch Demo
-                </button>
+                
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -282,7 +283,7 @@ const Homepage2 = () => {
         id="features"
         className="py-20 relative"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative" id="a1">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
               Everything You Need to Land Your Dream Job

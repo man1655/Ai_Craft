@@ -70,7 +70,7 @@ IMPORTANT:
     const response = await result.response;
     const text = response.text();
     
-    console.log('Raw Gemini response:', text); // For debugging
+ // For debugging
     
     return cleanAndParseJSON(text);
   } catch (error) {
@@ -111,7 +111,7 @@ IMPORTANT:
     const response = await result.response;
     const text = response.text();
     
-    console.log('Raw explanation response:', text);
+    
     
     return cleanAndParseJSON(text);
   } catch (error) {

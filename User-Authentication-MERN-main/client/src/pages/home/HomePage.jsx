@@ -231,7 +231,7 @@ function HomePage() {
                 <div className="p-2 bg-gray-900/20">
                   <img
                     className="w-full h-auto rounded-2xl transition-transform duration-700 hover:scale-[1.02]"
-                    src='./heroSnapshot.png'
+                    src='../../../public/heroSnapshot.png'
                     alt="AI Resume Builder Dashboard"
                   />
                 </div>

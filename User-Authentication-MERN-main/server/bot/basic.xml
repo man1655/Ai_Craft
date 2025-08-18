@@ -1,0 +1,28 @@
+<aiml version="1.0.1" encoding="UTF-8">
+
+  <category>
+    <pattern>HELLO</pattern>
+    <template>Hello! How can I assist you with your career today?</template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR NAME</pattern>
+    <template>I am CareerBot, your AI-powered career assistant.</template>
+  </category>
+
+  <category>
+    <pattern>HOW TO CREATE RESUME</pattern>
+    <template>To create a resume, go to the ResumeBuilder section and follow the guided steps.</template>
+  </category>
+
+  <category>
+    <pattern>HOW TO PREPARE FOR INTERVIEW</pattern>
+    <template>You can visit the InterviewPrep section to practice with AI-generated questions and tips.</template>
+  </category>
+
+  <category>
+    <pattern>HOW TO IMPROVE SKILLS</pattern>
+    <template>Use the AI Roadmap Generator to find personalized skill development paths based on your resume.</template>
+  </category>
+
+</aiml>

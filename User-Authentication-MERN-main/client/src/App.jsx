@@ -74,11 +74,10 @@ const App = () => {
      <ToastContainer />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/email-verify" element={<EmailVerify />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/Companyregister" element={<CompanyRegister />} />
-      <Route path="/Companylogin" element={<CompanyLogin />} />
+      
 
       {/* Protected Routes */}
       <Route
