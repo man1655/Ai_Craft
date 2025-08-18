@@ -7,14 +7,14 @@ export const AppContext = createContext();
 axios.defaults.withCredentials = true; // <- set globally once
 
 export const AppContextProvider = (props) => {
-  const backendUrl = "http://localhost:4000"; // or import.meta.env.VITE_BACKEND_URL
+  const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get("/api/user/data",  { withCredentials: true });
+      const { data } = await axios.get(backendUrl+"api/user/data",  { withCredentials: true });
       if (data.success) setUserData(data.userData);
       else toast.error(data.message);
     } catch (error) {
