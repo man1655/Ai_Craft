@@ -67,74 +67,74 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/mock-test", mockTestRouter);
 
-// === Resume Analyzer Upload (analyzer.py) ===
-const pythonPath = "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
-const analyzerPath = path.resolve(__dirname, "..", "analyzer.py");
+// // === Resume Analyzer Upload (analyzer.py) ===
+// const pythonPath = "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
+// const analyzerPath = path.resolve(__dirname, "..", "analyzer.py");
 
-app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+// app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
+//   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-  const resumePath = req.file.path;
-  const jobDescription = req.body.jobDescription;
+//   const resumePath = req.file.path;
+//   const jobDescription = req.body.jobDescription;
 
-  execFile(
-    pythonPath,
-    [analyzerPath, resumePath, jobDescription],
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error("execFile error:", error);
-        return res.status(500).json({ error: "Python script failed", details: error.message });
-      }
+//   execFile(
+//     pythonPath,
+//     [analyzerPath, resumePath, jobDescription],
+//     (error, stdout, stderr) => {
+//       if (error) {
+//         console.error("execFile error:", error);
+//         return res.status(500).json({ error: "Python script failed", details: error.message });
+//       }
 
-      try {
-        const result = JSON.parse(stdout);
-        res.json(result);
-      } catch (parseErr) {
-        console.error("JSON parse error:", parseErr);
-        res.status(500).json({ error: "Invalid JSON from analyzer.py" });
-      }
-    }
-  );
-});
+//       try {
+//         const result = JSON.parse(stdout);
+//         res.json(result);
+//       } catch (parseErr) {
+//         console.error("JSON parse error:", parseErr);
+//         res.status(500).json({ error: "Invalid JSON from analyzer.py" });
+//       }
+//     }
+//   );
+// });
 
-// === Career Predictor (career_predictor.py with Gemini) ===
-const predictorPath = path.resolve(__dirname, "../career_predictor.py");
+// // === Career Predictor (career_predictor.py with Gemini) ===
+// const predictorPath = path.resolve(__dirname, "../career_predictor.py");
 
-app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+// app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
+//   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-  const resumePath = req.file.path;
+//   const resumePath = req.file.path;
 
-  execFile(
-    pythonPath,
-    [predictorPath, resumePath],
-    async (error, stdout, stderr) => {
-      if (error) {
-        console.error("Python execution failed:", stderr);
-        return res.status(500).json({ error: "Python execution failed", details: stderr });
-      }
+//   execFile(
+//     pythonPath,
+//     [predictorPath, resumePath],
+//     async (error, stdout, stderr) => {
+//       if (error) {
+//         console.error("Python execution failed:", stderr);
+//         return res.status(500).json({ error: "Python execution failed", details: stderr });
+//       }
 
-      try {
-        const parsed = JSON.parse(stdout);
-        const { extracted_skills, career_prediction } = parsed;
+//       try {
+//         const parsed = JSON.parse(stdout);
+//         const { extracted_skills, career_prediction } = parsed;
 
-        const roadmap = await generateRoadmap(
-          career_prediction.missing_skills,
-          career_prediction.best_fit_role
-        );
+//         const roadmap = await generateRoadmap(
+//           career_prediction.missing_skills,
+//           career_prediction.best_fit_role
+//         );
 
-        res.json({
-          extracted_skills,
-          career_prediction,
-          roadmap_for_missing_skills: roadmap,
-        });
-      } catch (err) {
-        console.error("Failed to parse or generate roadmap:", err);
-        res.status(500).json({ error: "Error parsing Python output or Gemini response" });
-      }
-    }
-  );
-});
+//         res.json({
+//           extracted_skills,
+//           career_prediction,
+//           roadmap_for_missing_skills: roadmap,
+//         });
+//       } catch (err) {
+//         console.error("Failed to parse or generate roadmap:", err);
+//         res.status(500).json({ error: "Error parsing Python output or Gemini response" });
+//       }
+//     }
+//   );
+// });
 
 // app.listen(port, () => {
 //   console.log(`✅ Server is running at http://localhost:${port}`);
