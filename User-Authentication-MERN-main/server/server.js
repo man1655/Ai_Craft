@@ -18,7 +18,7 @@ import sessionRoutes from "./routes/sessionRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import emailRoutes from "./routes/email.js";
-import { generateRoadmap } from "./routes/gemini.js"; 
+import { generateRoadmap } from "./routes/gemini.js";
 
 // Handle __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -29,48 +29,43 @@ const app = express();
 
 const port = process.env.PORT || 4000;
 
-// === Manual CORS Middleware ===
-const allowedOrigins = [
-  "http://localhost:5173",                 // local dev
-  "https://ai-craft-teal.vercel.app"       // frontend (Vercel app)
-];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman or server-to-server
+      if (allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // ✅ must be true
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, origin);  // <-- send exact origin
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
-// Handle preflight requests globally
-app.options("*", cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, origin);  // <-- send exact origin
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
+// Also handle OPTIONS preflight
+app.options(
+  "*",
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // ✅ Add this
 app.use(cookieParser());
-
 
 // const upload = multer({ dest: "uploads/" });
 
