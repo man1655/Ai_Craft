@@ -19,7 +19,7 @@ const Login = () => {
     try {
       e.preventDefault();
       if (state === "Sign Up") {
-        const {data} = await axios.post("/api/auth/register", {
+        const {data} = await axios.post(`${import.meta.env.VITE_APP_URL}api/auth/register`, {
           name,
           email,
           password,
@@ -32,7 +32,7 @@ const Login = () => {
           toast.error(data.message);
         }
       } else {
-        const {data} = await axios.post("/api/auth/login", {
+        const {data} = await axios.post(`${import.meta.env.VITE_APP_URL}api/auth/login`, {
           email,
           password,
         },{ withCredentials: true });

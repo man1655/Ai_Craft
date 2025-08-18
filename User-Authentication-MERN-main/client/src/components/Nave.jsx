@@ -22,8 +22,8 @@ function Nave() {
 
   const logout = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const { data } = await axios.post("/api/auth/logout",  { withCredentials: true });
+      
+      const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}api/auth/logout`,  { withCredentials: true });
       if (data.success) {
         setIsLoggedIn(false);
         setUserData(null);

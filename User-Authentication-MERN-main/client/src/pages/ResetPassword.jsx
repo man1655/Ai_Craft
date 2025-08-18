@@ -20,7 +20,7 @@ const ResetPassword = () => {
   const onSubmitEmail = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/auth/send-reset-otp",
+      const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/api/auth/send-reset-otp`,
         { email },{ withCredentials: true }
       );
       data.success ? toast.success(data.message) : toast.error(data.message);
