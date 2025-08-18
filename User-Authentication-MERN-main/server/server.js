@@ -32,7 +32,7 @@ const port = process.env.PORT || 4000;
 // === Manual CORS Middleware ===
 const allowedOrigins = [
   "http://localhost:5173",         // local dev
-  "https://ai-craft-teal.vercel.app/"  // vercel production
+  "https://ai-craft-teal.vercel.app"  // vercel production
 ];
 // Middleware
 app.use(cors({
@@ -52,7 +52,7 @@ app.use(express.json()); // ✅ Add this
 app.use(cookieParser());
 
 
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
 // Connect to MongoDB
 connectDB();
