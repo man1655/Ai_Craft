@@ -31,22 +31,31 @@ const port = process.env.PORT || 4000;
 
 // === Manual CORS Middleware ===
 const allowedOrigins = [
-  "http://localhost:5173",         // local dev
-  "https://ai-craft-teal.vercel.app"  // vercel production
+  "http://localhost:5173",              // local dev
+  "https://ai-craft-teal.vercel.app"    // frontend on Vercel
 ];
+
 // Middleware
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"], // make sure casing matches
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-}));
-app.options("*", cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Handle preflight
+app.options("*", cors());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // ✅ Add this
 app.use(cookieParser());
