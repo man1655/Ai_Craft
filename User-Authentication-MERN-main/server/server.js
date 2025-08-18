@@ -32,7 +32,7 @@ const port = process.env.PORT || 4000;
 // === Manual CORS Middleware ===
 const allowedOrigins = [
   "http://localhost:5173",         // local dev
-  "https://ai-craft-teal.vercel.app"  // vercel production
+  "https://ai-craft-5mv72e40a-man1655s-projects.vercel.app"  // vercel production
 ];
 // Middleware
 app.use(cors({
