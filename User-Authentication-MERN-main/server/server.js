@@ -1,157 +1,161 @@
-import express from "express";
-import "dotenv/config";
-import multer from "multer";
-import cookieParser from "cookie-parser";
-import { execFile } from "child_process";
-import { fileURLToPath } from "url";
-import path from "path";
-import mockTestRouter from "./routes/mockTest.js";
-import cors from "cors";
+  import express from "express";
+  import "dotenv/config";
+  import multer from "multer";
+  import cookieParser from "cookie-parser";
+  import { execFile } from "child_process";
+  import { fileURLToPath } from "url";
+  import path from "path";
+  import mockTestRouter from "./routes/mockTest.js";
+  import cors from "cors";
 
-import connectDB from "./config/mongodb.js";
+  import connectDB from "./config/mongodb.js";
 
-// Import routes
-import authRouter from "./routes/authRoutes.js";
-import userRouter from "./routes/userRoutes.js";
-import resumeRouter from "./routes/resume.routes.js";
-import sessionRoutes from "./routes/sessionRoutes.js";
-import questionRoutes from "./routes/questionRoutes.js";
-import aiRoutes from "./routes/aiRoutes.js";
-import emailRoutes from "./routes/email.js";
-import { generateRoadmap } from "./routes/gemini.js";
+  // Import routes
+  import authRouter from "./routes/authRoutes.js";
+  import userRouter from "./routes/userRoutes.js";
+  import resumeRouter from "./routes/resume.routes.js";
+  import sessionRoutes from "./routes/sessionRoutes.js";
+  import questionRoutes from "./routes/questionRoutes.js";
+  import aiRoutes from "./routes/aiRoutes.js";
+  import emailRoutes from "./routes/email.js";
+  import { generateRoadmap } from "./routes/gemini.js"; 
 
-// Handle __dirname in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+  // Handle __dirname in ESM
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
-// Create Express app
-const app = express();
+  // Create Express app
+  const app = express();
 
-const port = process.env.PORT || 4000;
+  const port = process.env.PORT || 4000;
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow Postman or server-to-server
-      if (allowedOrigins.includes(origin)) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // ✅ must be true
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+  // === Manual CORS Middleware ===
+  const allowedOrigins = [
+    "http://localhost:5173",                 // local dev
+    "https://ai-craft-teal.vercel.app"       // frontend (Vercel app)
+  ];
 
-// Also handle OPTIONS preflight
-app.options(
-  "*",
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+  app.use(cors({
+  origin: function (origin, callback) {
+    // allow server-to-server requests (no origin)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // ✅ allow cookies
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // ✅ Add this
-app.use(cookieParser());
+// Handle OPTIONS preflight requests for all routes
+app.options("*", cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
-// const upload = multer({ dest: "uploads/" });
 
-// Connect to MongoDB
-connectDB();
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json()); // ✅ Add this
+  app.use(cookieParser());
 
-// Routes
-app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
-app.use("/api/resumes", resumeRouter);
-app.use("/api/sessions", sessionRoutes);
-app.use("/api/questions", questionRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/email", emailRoutes);
-app.use("/api/mock-test", mockTestRouter);
 
-// // === Resume Analyzer Upload (analyzer.py) ===
-// const pythonPath = "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
-// const analyzerPath = path.resolve(__dirname, "..", "analyzer.py");
+  // const upload = multer({ dest: "uploads/" });
 
-// app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
-//   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  // Connect to MongoDB
+  connectDB();
 
-//   const resumePath = req.file.path;
-//   const jobDescription = req.body.jobDescription;
+  // Routes
+  app.use("/api/auth", authRouter);
+  app.use("/api/user", userRouter);
+  app.use("/api/resumes", resumeRouter);
+  app.use("/api/sessions", sessionRoutes);
+  app.use("/api/questions", questionRoutes);
+  app.use("/api/ai", aiRoutes);
+  app.use("/api/email", emailRoutes);
+  app.use("/api/mock-test", mockTestRouter);
 
-//   execFile(
-//     pythonPath,
-//     [analyzerPath, resumePath, jobDescription],
-//     (error, stdout, stderr) => {
-//       if (error) {
-//         console.error("execFile error:", error);
-//         return res.status(500).json({ error: "Python script failed", details: error.message });
-//       }
+  // // === Resume Analyzer Upload (analyzer.py) ===
+  // const pythonPath = "C:\\Users\\Man Patel\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
+  // const analyzerPath = path.resolve(__dirname, "..", "analyzer.py");
 
-//       try {
-//         const result = JSON.parse(stdout);
-//         res.json(result);
-//       } catch (parseErr) {
-//         console.error("JSON parse error:", parseErr);
-//         res.status(500).json({ error: "Invalid JSON from analyzer.py" });
-//       }
-//     }
-//   );
-// });
+  // app.post("/api/resume/upload", upload.single("resume"), (req, res) => {
+  //   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-// // === Career Predictor (career_predictor.py with Gemini) ===
-// const predictorPath = path.resolve(__dirname, "../career_predictor.py");
+  //   const resumePath = req.file.path;
+  //   const jobDescription = req.body.jobDescription;
 
-// app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
-//   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  //   execFile(
+  //     pythonPath,
+  //     [analyzerPath, resumePath, jobDescription],
+  //     (error, stdout, stderr) => {
+  //       if (error) {
+  //         console.error("execFile error:", error);
+  //         return res.status(500).json({ error: "Python script failed", details: error.message });
+  //       }
 
-//   const resumePath = req.file.path;
+  //       try {
+  //         const result = JSON.parse(stdout);
+  //         res.json(result);
+  //       } catch (parseErr) {
+  //         console.error("JSON parse error:", parseErr);
+  //         res.status(500).json({ error: "Invalid JSON from analyzer.py" });
+  //       }
+  //     }
+  //   );
+  // });
 
-//   execFile(
-//     pythonPath,
-//     [predictorPath, resumePath],
-//     async (error, stdout, stderr) => {
-//       if (error) {
-//         console.error("Python execution failed:", stderr);
-//         return res.status(500).json({ error: "Python execution failed", details: stderr });
-//       }
+  // // === Career Predictor (career_predictor.py with Gemini) ===
+  // const predictorPath = path.resolve(__dirname, "../career_predictor.py");
 
-//       try {
-//         const parsed = JSON.parse(stdout);
-//         const { extracted_skills, career_prediction } = parsed;
+  // app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
+  //   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-//         const roadmap = await generateRoadmap(
-//           career_prediction.missing_skills,
-//           career_prediction.best_fit_role
-//         );
+  //   const resumePath = req.file.path;
 
-//         res.json({
-//           extracted_skills,
-//           career_prediction,
-//           roadmap_for_missing_skills: roadmap,
-//         });
-//       } catch (err) {
-//         console.error("Failed to parse or generate roadmap:", err);
-//         res.status(500).json({ error: "Error parsing Python output or Gemini response" });
-//       }
-//     }
-//   );
-// });
+  //   execFile(
+  //     pythonPath,
+  //     [predictorPath, resumePath],
+  //     async (error, stdout, stderr) => {
+  //       if (error) {
+  //         console.error("Python execution failed:", stderr);
+  //         return res.status(500).json({ error: "Python execution failed", details: stderr });
+  //       }
 
-// app.listen(port, () => {
-//   console.log(`✅ Server is running at http://localhost:${port}`);
-// });
-export default app;
+  //       try {
+  //         const parsed = JSON.parse(stdout);
+  //         const { extracted_skills, career_prediction } = parsed;
+
+  //         const roadmap = await generateRoadmap(
+  //           career_prediction.missing_skills,
+  //           career_prediction.best_fit_role
+  //         );
+
+  //         res.json({
+  //           extracted_skills,
+  //           career_prediction,
+  //           roadmap_for_missing_skills: roadmap,
+  //         });
+  //       } catch (err) {
+  //         console.error("Failed to parse or generate roadmap:", err);
+  //         res.status(500).json({ error: "Error parsing Python output or Gemini response" });
+  //       }
+  //     }
+  //   );
+  // });
+
+  // app.listen(port, () => {
+  //   console.log(`✅ Server is running at http://localhost:${port}`);
+  // });
+  export default app;
