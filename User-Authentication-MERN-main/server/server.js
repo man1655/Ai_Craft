@@ -32,33 +32,17 @@ const port = process.env.PORT || 4000;
 // === Manual CORS Middleware ===
 const allowedOrigins = [
   "http://localhost:5173",         // local dev
-  "https://ai-craft-teal.vercel.app"  // vercel production
+  "https://ai-craft-teal.vercel.app/"  // vercel production
 ];
 // Middleware
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: "http://localhost:5173",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"], // make sure casing matches
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
 app.options("*", cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -152,6 +136,7 @@ app.post("/api/resume/predict", upload.single("resume"), async (req, res) => {
   );
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server is running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`✅ Server is running at http://localhost:${port}`);
+// });
+export default app;
